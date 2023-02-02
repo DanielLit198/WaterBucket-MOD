@@ -54,7 +54,6 @@ public class WaterBucketEntity extends MobEntity implements IAnimatable {
     }
     @Override
     public void tick() {
-        particle3();
         age = age + 1;
         if (age <= 40){
             particle();
@@ -150,18 +149,6 @@ public class WaterBucketEntity extends MobEntity implements IAnimatable {
             }
         }
     }
-
-    public void particle3() {
-        int r = 8;
-        Vec3d point = new Vec3d(getX() + getRotationVector().getX(), getY() + getRotationVector().getY(), getZ() + getRotationVector().getZ());
-        for (int i = 0; i < 360; i++) {
-            world.addParticle(ParticleTypes.CLOUD,true,point.getX() + r * Math.cos(i),point.getY(),point.getZ()+r,0,0,0);
-        }
-
-    }
-
-
-
     @Override
     public boolean damage(DamageSource source, float amount) {
         return false;
