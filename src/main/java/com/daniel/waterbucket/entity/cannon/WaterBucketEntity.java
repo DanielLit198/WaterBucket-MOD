@@ -18,6 +18,7 @@ import net.minecraft.world.explosion.Explosion;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +29,7 @@ public class WaterBucketEntity extends MobEntity implements IAnimatable {
     public int age;
 
     public ArrayList<BlockPos> pos = new ArrayList<>();
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public WaterBucketEntity(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
         setNoGravity(true);

@@ -16,6 +16,7 @@ import net.minecraft.world.explosion.Explosion;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Random;
 
@@ -25,11 +26,18 @@ public class MeteoriteEntity extends MobEntity implements IAnimatable {
     public int explosionTime;
     public Vec3d vec3;
 
-    private final AnimationFactory factory = new AnimationFactory(this);
+//    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+
 
     public MeteoriteEntity(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
     }
+
+
+
+
 
     public void setVec3(Vec3d vec3) {
         this.vec3 = vec3;
