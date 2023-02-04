@@ -27,13 +27,12 @@ import java.util.Random;
 public class WaterBucketEntity extends MobEntity implements IAnimatable {
     public PlayerEntity player;
     public int age;
-
+    public boolean dead;
     public ArrayList<BlockPos> pos = new ArrayList<>();
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public WaterBucketEntity(EntityType<? extends MobEntity> entityType, World world) {
         super(entityType, world);
         setNoGravity(true);
-
     }
 
     @Override
@@ -55,6 +54,7 @@ public class WaterBucketEntity extends MobEntity implements IAnimatable {
     }
     @Override
     public void tick() {
+        System.out.println(dead);
         age = age + 1;
         if (age <= 40){
             particle();
@@ -65,6 +65,10 @@ public class WaterBucketEntity extends MobEntity implements IAnimatable {
         }
         if (age == 160){
             discard();
+        }
+        if (dead){
+            discard();
+            dead = false;
         }
         super.tick();
     }
@@ -105,7 +109,6 @@ public class WaterBucketEntity extends MobEntity implements IAnimatable {
             }
         }
     }
-
     public void particle(){
         int q = new Random().nextInt(2) == 1 ? 1:-1;
         int i = new Random().nextInt(2) == 1 ? 1:-1;
