@@ -1,4 +1,4 @@
-package com.daniel.waterbucket.item;
+package com.daniel.waterbucket.item.Meteorite;
 
 import com.daniel.waterbucket.entity.ModEntity;
 import com.daniel.waterbucket.entity.waterball.MeteoriteEntity;
@@ -18,13 +18,13 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class MeteoriteBucket extends Item {
+public class MeteoriteShower extends Item {
     private int Age;
     public boolean spawn;
     public int isRecorded = 0;
     ItemStack itemStack = null;
     public boolean PisOnG = false;
-    public MeteoriteBucket() {
+    public MeteoriteShower() {
         super(new FabricItemSettings().group(ItemGroup.MISC).maxCount(1));
         Age = 0;
         spawn = false;

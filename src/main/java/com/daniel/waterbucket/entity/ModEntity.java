@@ -19,6 +19,6 @@ public class ModEntity {
     public static final EntityType<WaterBucketEntity> WATER_BUCKET_ENTITY = Registry.register(
             Registry.ENTITY_TYPE,new Identifier(Waterbucket.MOD_ID,"waterbucket"),
             FabricEntityTypeBuilder.create(SpawnGroup.MISC, WaterBucketEntity::new)
-                    .dimensions(EntityDimensions.fixed(2f,2f)).build());
+                    .dimensions(EntityDimensions.fixed(0.5f,0.5f)).build());
 
 }

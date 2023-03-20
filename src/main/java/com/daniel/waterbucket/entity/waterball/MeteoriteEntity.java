@@ -92,8 +92,6 @@ public class MeteoriteEntity extends MobEntity implements IAnimatable {
                 this.getWorld().setBlockState(boomPos, Blocks.WATER.getDefaultState());
             }
         }
-
-
     }
     public void particle1(){
         double a = 0;

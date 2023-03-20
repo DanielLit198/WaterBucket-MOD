@@ -7,6 +7,7 @@ import com.daniel.waterbucket.particle.WaterParticle;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
@@ -38,6 +39,5 @@ public class WaterbucketClient implements ClientModInitializer {
             registry.register(new Identifier(Waterbucket.MOD_ID,"particles/waterbucketp"));
         }));
         ParticleFactoryRegistry.getInstance().register(WaterBucket, WaterBucketParticle.Factory::new);
-
     }
 }

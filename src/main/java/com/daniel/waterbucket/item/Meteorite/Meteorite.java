@@ -1,4 +1,4 @@
-package com.daniel.waterbucket.item;
+package com.daniel.waterbucket.item.Meteorite;
 
 import com.daniel.waterbucket.entity.ModEntity;
 import com.daniel.waterbucket.entity.waterball.MeteoriteEntity;
@@ -17,10 +17,10 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class MeteoriteBucketO extends Item {
+public class Meteorite extends Item {
     public int Age;
     public boolean spawn;
-    public MeteoriteBucketO() {
+    public Meteorite() {
         super(new FabricItemSettings().group(ItemGroup.MISC).maxCount(1));
         Age = 0;
         spawn = false;
@@ -41,7 +41,7 @@ public class MeteoriteBucketO extends Item {
         waterBall.refreshPositionAndAngles(user.getX() + d , user.getY() +10, user.getZ() + c, 0, 0);
         waterBall.setVec3(new Vec3d(-q * m, ((getBlock(user) - waterBall.getY()) / 10) * m, -a * m));
         world.spawnEntity(waterBall);
-        user.setVelocity(new Vec3d(0, 1.2, 0));
+        user.setVelocity(new Vec3d(0, 2, 0));
         waterBall.owner = user;
 
         if (!user.isCreative()) {
