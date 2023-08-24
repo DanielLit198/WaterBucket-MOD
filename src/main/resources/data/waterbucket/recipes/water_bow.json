@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:smithing",
+    "base": {
+        "item": "minecraft:bow"
+    },
+    "addition": {
+        "item": "minecraft:water_bucket"
+    },
+    "result": {
+        "item": "waterbucket:can"
+    }
+}

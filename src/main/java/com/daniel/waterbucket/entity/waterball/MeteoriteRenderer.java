@@ -8,8 +8,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
-public class MeteoriteRenderer extends GeoEntityRenderer<MeteoriteEntity> {
+public class MeteoriteRenderer extends GeoProjectilesRenderer<MeteoriteEntity> {
 
     public MeteoriteRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new MeteoriteModel());

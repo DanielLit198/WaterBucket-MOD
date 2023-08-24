@@ -1,6 +1,6 @@
 package com.daniel.waterbucket.item.Meteorite;
 
-import com.daniel.waterbucket.entity.ModEntity;
+import com.daniel.waterbucket.init.EntityInit;
 import com.daniel.waterbucket.entity.waterball.MeteoriteEntity;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Blocks;
@@ -21,7 +21,7 @@ public class Meteorite extends Item {
     public int Age;
     public boolean spawn;
     public Meteorite() {
-        super(new FabricItemSettings().group(ItemGroup.MISC).maxCount(1));
+        super(new FabricItemSettings().group(ItemGroup.COMBAT).maxCount(1));
         Age = 0;
         spawn = false;
     }
@@ -37,12 +37,12 @@ public class Meteorite extends Item {
         int c = 10 * a;
         double m = 0.5;
 
-        MeteoriteEntity waterBall = new MeteoriteEntity(ModEntity.WATER_BALL, world);
-        waterBall.refreshPositionAndAngles(user.getX() + d , user.getY() +10, user.getZ() + c, 0, 0);
+        MeteoriteEntity waterBall = new MeteoriteEntity(EntityInit.WATER_BALL, world);
+        waterBall.refreshPositionAndAngles(user.getX() + d , user.getY() +40, user.getZ() + c, 0, 0);
         waterBall.setVec3(new Vec3d(-q * m, ((getBlock(user) - waterBall.getY()) / 10) * m, -a * m));
+        waterBall.setOwner(user);
         world.spawnEntity(waterBall);
-        user.setVelocity(new Vec3d(0, 2, 0));
-        waterBall.owner = user;
+
 
         if (!user.isCreative()) {
             if (user.getStackInHand(Hand.MAIN_HAND).getItem() == this) {
@@ -55,7 +55,7 @@ public class Meteorite extends Item {
 
 
 
-        return super.use(world, user, hand);
+        return TypedActionResult.success(user.getStackInHand(hand));
     }
 
     public int getBlock(PlayerEntity user){

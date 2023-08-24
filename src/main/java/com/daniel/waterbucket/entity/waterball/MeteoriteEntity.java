@@ -1,15 +1,22 @@
 package com.daniel.waterbucket.entity.waterball;
 
-import com.daniel.waterbucket.client.WaterbucketClient;
+import com.daniel.waterbucket.init.EnchantmentInit;
+import com.daniel.waterbucket.init.ParticleInit;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MovementType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
@@ -20,79 +27,60 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Random;
 
-public class MeteoriteEntity extends MobEntity implements IAnimatable {
-    public PlayerEntity owner;
-    int age;
-    public int explosionTime;
+public class MeteoriteEntity extends PersistentProjectileEntity implements IAnimatable {
     public Vec3d vec3;
-
-//    private final AnimationFactory factory = new AnimationFactory(this);
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-
-
-
-    public MeteoriteEntity(EntityType<? extends MobEntity> entityType, World world) {
+    public MeteoriteEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
-
-
-
-
-
     public void setVec3(Vec3d vec3) {
         this.vec3 = vec3;
     }
 
     @Override
-    public void travel(Vec3d movementInput) {
-        this.updateVelocity(0.1f, movementInput);
-        this.move(MovementType.SELF, this.getVelocity());
-        if (world.getBlockState(new BlockPos(getX(),getY()-1,getZ())).isAir() && vec3 != null) {
-            setVelocity(vec3);
-        }else if (world.getBlockState(new BlockPos(getX(),getY()-1,getZ())).isOf(Blocks.WATER)){
-            setVelocity(0,-2,0);
-        }else setVelocity(0, 0, 0);
-        super.travel(movementInput);
-    }
-
-    @Override
-    public void tick(){
-        if (!world.getBlockState(new BlockPos(getX(),getY()-1,getZ())).isAir() ||
-                !world.getBlockState(new BlockPos(getX()+1,getY()-1,getZ())).isAir() ||
-                !world.getBlockState(new BlockPos(getX()-1,getY()-1,getZ())).isAir() ||
-                !world.getBlockState(new BlockPos(getX(),getY()-1,getZ()+1)).isAir() ||
-                !world.getBlockState(new BlockPos(getX(),getY()-1,getZ()-1)).isAir() ||
-                !world.getBlockState(new BlockPos(getX()+1,getY()-1,getZ()-1)).isAir() ||
-                !world.getBlockState(new BlockPos(getX()-1,getY()-1,getZ()-1)).isAir() ||
-                !world.getBlockState(new BlockPos(getX()+1,getY()-1,getZ()+1)).isAir() ||
-                !world.getBlockState(new BlockPos(getX()-1,getY()-1,getZ()+1)).isAir()) {
-            age = age + 1;
-            if (explosionTime == 0) {
-                explosion();
-                explosionTime = explosionTime + 1;
-            }
-        }else particle2();
-
-
-        if (age >= 40){
+    protected void onCollision(HitResult hitResult) {
+        if (hitResult instanceof BlockHitResult blockHitResult && world.getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.AIR && world.getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.WATER) {
+            particle1();
+            particle3();
+            explosion();
+            waterDamage();
             discard();
         }
-         super.tick();
+    }
+
+    public void waterDamage(){
+        double range = 3;
+        Box box = new Box(new BlockPos(this.getX(),this.getY(),this.getZ())).expand(range);
+//        for (BlockPos b : BlockPos.iterate((int) box.minX, (int)box.minY, (int)box.minZ, (int)box.maxX, (int)box.maxY, (int)box.maxZ)) {
+//            // 设置该位置的方块为红色玻璃方块
+//            world.setBlockState(b, Blocks.RED_STAINED_GLASS.getDefaultState(), 2);
+//        }
+        float amount = 18;
+        world.getEntitiesByClass(LivingEntity.class,box, entity -> true)
+                .forEach(entity -> entity.damage(DamageSource.player((PlayerEntity) this.getOwner()), amount));
+    }
+    @Override
+    public void tick(){
+        if (vec3 != null) setVelocity(vec3);
+        if (!this.onGround)particle2();
+        super.tick();
+    }
+    @Override
+    protected ItemStack asItemStack() {
+        return new ItemStack(Items.AIR);
     }
     public void explosion(){
-        particle1();
-        particle3();
-
-        Explosion explosion = new Explosion(this.getWorld(),this,this.getX(),this.getY()-5,this.getZ(),30,false, Explosion.DestructionType.BREAK);
-        explosion.collectBlocksAndDamageEntities();
+        if (world.isClient()) return;
         this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE,4,0);
+        Explosion explosion = new Explosion(this.getWorld(),this,this.getX(),this.getY(),this.getZ(),1.4f,false, Explosion.DestructionType.BREAK);
+        explosion.collectBlocksAndDamageEntities();
         for (int i = 0; i < explosion.getAffectedBlocks().toArray().length; i++) {
             BlockPos boomPos = new BlockPos(explosion.getAffectedBlocks().get(i));
-            if (getWorld().getBlockState(boomPos) != Blocks.AIR.getDefaultState()) {
-                this.getWorld().setBlockState(boomPos, Blocks.WATER.getDefaultState());
-            }
+            this.getWorld().setBlockState(boomPos, Blocks.WATER.getDefaultState());
         }
+
     }
+
     public void particle1(){
         double a = 0;
         double b = 0;
@@ -141,7 +129,7 @@ public class MeteoriteEntity extends MobEntity implements IAnimatable {
 
 
             this.world.addParticle(ParticleTypes.CLOUD,true,getX()+s,getY()+f,getZ()+h,v * 0.3,b * 0.3,n * 0.3);
-            this.world.addParticle(WaterbucketClient.Water,getX()+w,getY()+y,getZ()+r,m,l,k);
+            this.world.addParticle(ParticleInit.Water,getX()+w,getY()+y,getZ()+r,m,l,k);
         }
     }
 
@@ -155,7 +143,7 @@ public class MeteoriteEntity extends MobEntity implements IAnimatable {
             double z = getZ() + r * Math.sin(a);
 
             int q = 1;
-            this.world.addParticle(WaterbucketClient.WaterDrop, getX(),getY()+2,getZ(),(x - getX()) * q,y * q,(z - getZ()) * q);
+            this.world.addParticle(ParticleInit.WaterDrop, getX(),getY()+2,getZ(),(x - getX()) * q,y * q,(z - getZ()) * q);
         }
     }
 

@@ -8,4 +8,6 @@ public class Shield extends Item {
         super(new Settings().maxCount(1).group(ItemGroup.COMBAT));
     }
 
+
+
 }

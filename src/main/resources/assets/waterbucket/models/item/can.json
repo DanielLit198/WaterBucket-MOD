@@ -1,6 +1,28 @@
 {
   "parent": "item/generated",
-  "textures":{
-    "layer0": "waterbucket:item/water_bucket"
-  }
+  "textures": {
+    "layer0": "minecraft:item/bow"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "pulling": 1
+      },
+      "model": "waterbucket:item/bow_pulling_0"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.45
+      },
+      "model": "waterbucket:item/bow_pulling_1"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9
+      },
+      "model": "waterbucket:item/bow_pulling_2"
+    }
+  ]
 }

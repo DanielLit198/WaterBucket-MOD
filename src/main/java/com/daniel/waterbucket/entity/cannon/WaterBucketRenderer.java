@@ -8,8 +8,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
-public class WaterBucketRenderer extends GeoEntityRenderer<WaterBucketEntity> {
+public class WaterBucketRenderer extends GeoProjectilesRenderer<WaterBucketEntity> {
 
     public WaterBucketRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new WaterBucketModel());
@@ -18,7 +19,7 @@ public class WaterBucketRenderer extends GeoEntityRenderer<WaterBucketEntity> {
 
     @Override
     public RenderLayer getRenderType(WaterBucketEntity animatable, float partialTicks, MatrixStack stack, @Nullable VertexConsumerProvider renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn, Identifier textureLocation) {
-        float b = 1.5F;
+        float b = 1F;
         stack.scale(b,b,b);
         return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
     }

@@ -14,7 +14,7 @@ public class WaterParticle extends SpriteBillboardParticle {
     float c = 0;
     public WaterParticle(ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
         super(clientWorld, d, e, f, g, h, i);
-        this.maxAge = 30;
+        this.maxAge = 10;
         double q = 0.1;
         this.velocityX = g * q;
         this.velocityY = h * q;
@@ -23,8 +23,8 @@ public class WaterParticle extends SpriteBillboardParticle {
 
     @Override
     public void tick() {
-        if (age >= 20){
-            c = c + 0.02f;
+        if (age >= 2){
+            c = c + 0.03f;
         }
         super.tick();
     }

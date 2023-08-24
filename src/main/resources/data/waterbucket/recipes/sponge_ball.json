@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:sponge"
+    }
+  ],
+  "result": {
+    "item": "waterbucket:sponge_ball",
+    "count": 1
+  }
+}
