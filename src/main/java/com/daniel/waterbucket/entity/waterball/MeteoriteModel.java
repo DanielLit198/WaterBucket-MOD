@@ -2,9 +2,9 @@ package com.daniel.waterbucket.entity.waterball;
 
 import com.daniel.waterbucket.Waterbucket;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class MeteoriteModel extends AnimatedGeoModel<MeteoriteEntity> {
+public class MeteoriteModel extends GeoModel<MeteoriteEntity> {
     @Override
     public Identifier getModelResource(MeteoriteEntity object) {
         return new Identifier(Waterbucket.MOD_ID,"geo/entity/waterball.geo.json");

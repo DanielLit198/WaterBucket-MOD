@@ -35,7 +35,7 @@ import java.util.Random;
 public class MlgWorldConveyor extends Item {
 
     public MlgWorldConveyor() {
-        super(new Settings().group(ItemGroup.MISC).maxCount(1));
+        super(new Settings().maxCount(1));
     }
 
     @Override

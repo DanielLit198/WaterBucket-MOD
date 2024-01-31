@@ -1,35 +1,35 @@
 package com.daniel.waterbucket.entity.waterball;
 
-import com.daniel.waterbucket.init.EnchantmentInit;
+import com.daniel.waterbucket.init.EntityInit;
 import com.daniel.waterbucket.init.ParticleInit;
+import com.daniel.waterbucket.item.WaterBuckets.WaterBuckets;
 import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Random;
 
-public class MeteoriteEntity extends PersistentProjectileEntity implements IAnimatable {
+public class MeteoriteEntity extends PersistentProjectileEntity implements GeoAnimatable {
     public Vec3d vec3;
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     public MeteoriteEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -39,7 +39,7 @@ public class MeteoriteEntity extends PersistentProjectileEntity implements IAnim
 
     @Override
     protected void onCollision(HitResult hitResult) {
-        if (hitResult instanceof BlockHitResult blockHitResult && world.getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.AIR && world.getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.WATER) {
+        if (hitResult instanceof EntityHitResult || hitResult instanceof BlockHitResult blockHitResult && getWorld().getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.AIR && getWorld().getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.WATER) {
             particle1();
             particle3();
             explosion();
@@ -48,21 +48,48 @@ public class MeteoriteEntity extends PersistentProjectileEntity implements IAnim
         }
     }
 
+    @Override
+    protected void onEntityHit(EntityHitResult entityHitResult) {
+        super.onEntityHit(entityHitResult);
+    }
+
     public void waterDamage(){
-        double range = 3;
-        Box box = new Box(new BlockPos(this.getX(),this.getY(),this.getZ())).expand(range);
+        double range = 5;
+        Box box = new Box(this.getBlockPos()).expand(range);
 //        for (BlockPos b : BlockPos.iterate((int) box.minX, (int)box.minY, (int)box.minZ, (int)box.maxX, (int)box.maxY, (int)box.maxZ)) {
 //            // 设置该位置的方块为红色玻璃方块
 //            world.setBlockState(b, Blocks.RED_STAINED_GLASS.getDefaultState(), 2);
 //        }
         float amount = 18;
-        world.getEntitiesByClass(LivingEntity.class,box, entity -> true)
-                .forEach(entity -> entity.damage(DamageSource.player((PlayerEntity) this.getOwner()), amount));
+        getWorld().getEntitiesByClass(LivingEntity.class,box, entity -> true)
+                .forEach(entity -> entity.damage(getDamageSources().mobAttack((LivingEntity) this.getOwner()), amount));
     }
     @Override
     public void tick(){
         if (vec3 != null) setVelocity(vec3);
-        if (!this.onGround)particle2();
+        if (!this.isOnGround())particle2();
+
+        Box box = new Box(this.getBlockPos()).expand(3);
+        System.out.println(this.getWorld().getOtherEntities(this, box).size());
+        if (this.getWorld().getOtherEntities(this, box).size() > 0){
+            for (int i = 0; i < this.getWorld().getOtherEntities(null, box).size(); i++) {
+                if (!(this.getWorld().getOtherEntities(null, box).get(i) instanceof MeteoriteEntity)) {
+                    particle1();
+                    particle3();
+                    explosion();
+                    waterDamage();
+                    discard();
+                }
+            }
+        }
+
+        if (!getWorld().getBlockState(getBlockPos()).isAir()){
+            particle1();
+            particle3();
+            explosion();
+            waterDamage();
+            discard();
+        }
         super.tick();
     }
     @Override
@@ -70,9 +97,9 @@ public class MeteoriteEntity extends PersistentProjectileEntity implements IAnim
         return new ItemStack(Items.AIR);
     }
     public void explosion(){
-        if (world.isClient()) return;
+        if (getWorld().isClient()) return;
         this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE,4,0);
-        Explosion explosion = new Explosion(this.getWorld(),this,this.getX(),this.getY(),this.getZ(),1.4f,false, Explosion.DestructionType.BREAK);
+        Explosion explosion = new Explosion(this.getWorld(),this,this.getX(),this.getY(),this.getZ(),1.4f,false, Explosion.DestructionType.DESTROY);
         explosion.collectBlocksAndDamageEntities();
         for (int i = 0; i < explosion.getAffectedBlocks().toArray().length; i++) {
             BlockPos boomPos = new BlockPos(explosion.getAffectedBlocks().get(i));
@@ -98,7 +125,7 @@ public class MeteoriteEntity extends PersistentProjectileEntity implements IAnim
 
                 double fx = this.getX() + fr * Math.cos(a);
                 double fz = this.getZ() + fr * Math.sin(a);
-                this.world.addParticle(ParticleTypes.CLOUD,true, x, this.getY() + 2, z, fx - x, 0, fz - z);
+                this.getWorld().addParticle(ParticleTypes.CLOUD,true, x, this.getY() + 2, z, fx - x, 0, fz - z);
             }
         }
     }
@@ -128,8 +155,8 @@ public class MeteoriteEntity extends PersistentProjectileEntity implements IAnim
             int k = new Random().nextInt(2) == 1 ? 1:-1;
 
 
-            this.world.addParticle(ParticleTypes.CLOUD,true,getX()+s,getY()+f,getZ()+h,v * 0.3,b * 0.3,n * 0.3);
-            this.world.addParticle(ParticleInit.Water,getX()+w,getY()+y,getZ()+r,m,l,k);
+            this.getWorld().addParticle(ParticleTypes.CLOUD,true,getX()+s,getY()+f,getZ()+h,v * 0.3,b * 0.3,n * 0.3);
+            this.getWorld().addParticle(ParticleInit.Water,true,getX()+w,getY()+y,getZ()+r,m,l,k);
         }
     }
 
@@ -143,7 +170,7 @@ public class MeteoriteEntity extends PersistentProjectileEntity implements IAnim
             double z = getZ() + r * Math.sin(a);
 
             int q = 1;
-            this.world.addParticle(ParticleInit.WaterDrop, getX(),getY()+2,getZ(),(x - getX()) * q,y * q,(z - getZ()) * q);
+            this.getWorld().addParticle(ParticleInit.WaterDrop,true,getX(),getY()+2,getZ(),(x - getX()) * q,y * q,(z - getZ()) * q);
         }
     }
 
@@ -152,14 +179,19 @@ public class MeteoriteEntity extends PersistentProjectileEntity implements IAnim
         return false;
     }
 
+
     @Override
-    public void registerControllers(AnimationData animationData) {
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
 
     }
 
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return geoCache;
+    }
 
     @Override
-    public AnimationFactory getFactory() {
-        return factory;
+    public double getTick(Object o) {
+        return 0;
     }
 }

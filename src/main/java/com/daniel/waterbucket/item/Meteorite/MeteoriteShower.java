@@ -25,7 +25,7 @@ public class MeteoriteShower extends Item {
     ItemStack itemStack = null;
     public boolean PisOnG = false;
     public MeteoriteShower() {
-        super(new FabricItemSettings().group(ItemGroup.MISC).maxCount(1));
+        super(new FabricItemSettings().maxCount(1));
         Age = 0;
         spawn = false;
     }

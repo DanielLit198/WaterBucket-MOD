@@ -5,7 +5,12 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MLGMixin",
-    "ServerPlayerMixin"
+    "ServerPlayerMixin",
+    "PlayerMixin",
+    "anvilCompressed",
+    "ParticleCountMixin",
+    "WaterBucketsMixin"
+
   ],
   "client": [
   ],

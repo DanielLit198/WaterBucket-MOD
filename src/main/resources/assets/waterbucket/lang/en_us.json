@@ -1,25 +1,19 @@
 {
+  "item_group.waterbucket": "Water Bucket MOD",
+
   "item.waterbucket.water_bucket": "Water Bucket",
+  "item.waterbucket.buckets": "Water Buckets",
   "item.waterbucket.can": "WaterBucket Cannon",
   "item.waterbucket.meteorite": "Meteorite WaterBucket",
   "item.waterbucket.meteoriteshower": "Meteorite Shower Water Bucket",
+  "item.waterbucket.ground": "Compressed WaterBucket bucket",
   "item.waterbucket.sponge_ball": "Sponge Ball",
   "item.waterbucket.wet_sponge_ball": "Wet Sponge Ball",
   "item.waterbucket.conveyor": "Water Bucket Mlg World Conveyor",
   "item.waterbucket.locator": "Nearby Player Locator",
 
-  "item.waterbucket.bullet": "bullet",
-  "item.waterbucket.bullet1": "bullet1",
-  "item.waterbucket.bullet2": "bullet2",
-  "item.waterbucket.bullet3": "bullet3",
-  "item.waterbucket.bullet4": "bullet4",
-  "item.waterbucket.bullet5": "bullet5",
-  "item.waterbucket.bullet6": "bullet6",
-  "item.waterbucket.tank": "tank",
-
-
-
   "enchantment.waterbucket.charged": "Charged",
-  "enchantment.waterbucket.loyalty": "loyalty",
-  "enchantment.waterbucket.rapid": "rapid"
+  "enchantment.waterbucket.loyalty": "Loyalty",
+  "enchantment.waterbucket.rapid": "Rapid",
+  "enchantment.waterbucket.aquamagnitude": "Aquamagnitude"
 }

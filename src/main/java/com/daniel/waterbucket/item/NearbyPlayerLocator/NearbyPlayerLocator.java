@@ -31,7 +31,7 @@ public class NearbyPlayerLocator extends Item {
     // 记录上次使用时间的 Map，用于实现冷却时间
     private final Map<UUID, Long> cooldownMap = new HashMap<>();
     public NearbyPlayerLocator() {
-        super(new Settings().group(ItemGroup.MISC));
+        super(new Settings());
     }
 
     @Override
@@ -138,16 +138,16 @@ public class NearbyPlayerLocator extends Item {
         for (int i = 0; i < maxDistance; i++) {
             BlockPos targetPos = playerPos.offset(Direction.random(world.random), i);
             // 检查传送位置是否安全
-            if (isSafeTeleportLocation(world, targetPos)) {
-                return targetPos;
-            }
+//            if (isSafeTeleportLocation(world, targetPos)) {
+//                return targetPos;
+//            }
         }
         return null; // 没有找到有效位置
     }
     // 判断传送位置是否安全（不会窒息或脚下是虚空）
-    private boolean isSafeTeleportLocation(World world, BlockPos pos) {
-        return world.isAir(pos.up()) && !world.getBlockState(pos).getMaterial().isSolid();
-    }
+//    private boolean isSafeTeleportLocation(World world, BlockPos pos) {
+//        return world.isAir(pos.up()) && !world.getBlockState(pos).getMaterial().isSolid();
+//    }
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {

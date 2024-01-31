@@ -29,7 +29,7 @@ import java.util.Random;
 
 public class SpongeBall extends Item {
     public SpongeBall() {
-        super(new Settings().maxCount(16).group(ItemGroup.MISC));
+        super(new Settings().maxCount(16));
     }
 
     @Override

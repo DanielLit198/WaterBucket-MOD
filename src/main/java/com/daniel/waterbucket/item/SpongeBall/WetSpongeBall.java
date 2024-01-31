@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class WetSpongeBall extends Item {
     public WetSpongeBall() {
-        super(new Settings().group(ItemGroup.MISC));
+        super(new Settings());
     }
 
     @Override

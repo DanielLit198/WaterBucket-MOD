@@ -1,24 +1,21 @@
 {
+  "item_group.waterbucket": "水桶",
+
+
   "item.waterbucket.water_bucket": "水桶",
+  "item.waterbucket.buckets" : "堆叠水桶",
   "item.waterbucket.can": "水桶弓",
   "item.waterbucket.meteorite": "陨石水桶",
   "item.waterbucket.meteoriteshowerq": "水桶",
+  "item.waterbucket.ground": "压缩水桶",
   "item.waterbucket.wet_sponge_ball": "湿海绵球",
   "item.waterbucket.sponge_ball": "海绵球",
   "item.waterbucket.conveyor": "落地水世界传送器",
   "item.waterbucket.locator": "玩家位置获取器",
 
-  "item.waterbucket.bullet": "快速弹",
-  "item.waterbucket.bullet1": "炮弹",
-  "item.waterbucket.bullet2": "燃烧弹",
-  "item.waterbucket.bullet3": "散弹",
-  "item.waterbucket.bullet4": "末影弹",
-  "item.waterbucket.bullet5": "闪电弹",
-  "item.waterbucket.bullet6": "冰弹",
-  "item.waterbucket.tank": "坦克",
-
-
   "enchantment.waterbucket.charged": "充能",
   "enchantment.waterbucket.loyalty": "忠诚",
-  "enchantment.waterbucket.rapid": "快速射击"
+  "enchantment.waterbucket.rapid": "快速射击",
+  "enchantment.waterbucket.aquamagnitude": "水量"
+
 }

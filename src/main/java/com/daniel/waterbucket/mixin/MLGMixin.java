@@ -43,7 +43,7 @@ public abstract class MLGMixin {
         PlayerEntity player = (PlayerEntity) (Object) this;
         if (player.getEntityWorld() instanceof ServerWorld && player.getWorld().getDimensionKey() == DimensionInit.MLG_TYPE_KEY) {
             if (player.getY() < -100) {
-                long currentTime = player.world.getTime();
+                long currentTime = player.getWorld().getTime();
                 if (currentTime - lastTeleportTime >= TELEPORT_COOLDOWN) {
                     Random random = new Random();
                     Vec3d teleportPos = new Vec3d(player.getX() + random.nextDouble(200), 250, player.getZ() + random.nextDouble(200));

@@ -1,8 +1,8 @@
 {
-  "firefall": {
-    "subtitle": "subtitles.waterbucket.firefall",
+  "ground": {
+    "subtitle": "sounds.waterbucket.ground",
     "sounds": [
-      "waterbucket:firefall"
+      "waterbucket:ground"
     ]
   }
 }

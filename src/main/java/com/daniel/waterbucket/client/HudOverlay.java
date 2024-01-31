@@ -6,11 +6,9 @@ import com.daniel.waterbucket.item.Cannon.CannonItem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -19,7 +17,7 @@ public class HudOverlay implements HudRenderCallback {
     private static final Identifier Empty = new Identifier(Waterbucket.MOD_ID, "textures/charged/charged_hud.png");
 
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+    public void onHudRender(DrawContext drawContext, float tickDelta) {
         int x = 0;
         int y = 0;
         MinecraftClient client = MinecraftClient.getInstance();
@@ -31,7 +29,7 @@ public class HudOverlay implements HudRenderCallback {
             y = height/2;
         }
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1,1,1,1);
         RenderSystem.setShaderTexture(0, Empty);
 
@@ -42,7 +40,7 @@ public class HudOverlay implements HudRenderCallback {
             if (level == 2) length = 25;
             if (level == 1) length = 10;
             for (int i = 0; i < level; i++) {
-                DrawableHelper.drawTexture(matrixStack, x - length + (i * 28), y + 10, 0, 0, 22, 22, 22, 22);
+                drawContext.drawTexture(Empty, x - length + (i * 28), y + 10, 0, 0, 22, 22, 22, 22);
             }
         }
         RenderSystem.setShaderTexture(0,Full);
@@ -52,7 +50,7 @@ public class HudOverlay implements HudRenderCallback {
             if (level == 1) length = 10;
             if (itemStack.hasNbt()) {
                 for (int i = 0; i < itemStack.getNbt().getInt("charged"); i++) {
-                    DrawableHelper.drawTexture(matrixStack, x - length + (i * 28), y + 10, 0, 0, 22, 22, 22, 22);
+                    drawContext.drawTexture(Full, x - length + (i * 28), y + 10, 0, 0, 22, 22, 22, 22);
                 }
             }
         }

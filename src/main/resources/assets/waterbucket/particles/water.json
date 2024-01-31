@@ -1,5 +1,12 @@
 {
   "textures": [
-    "waterbucket:drip"
+    "waterbucket:generic_7",
+    "waterbucket:generic_6",
+    "waterbucket:generic_5",
+    "waterbucket:generic_4",
+    "waterbucket:generic_3",
+    "waterbucket:generic_2",
+    "waterbucket:generic_1",
+    "waterbucket:generic_0"
   ]
 }
